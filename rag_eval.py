@@ -7,8 +7,8 @@ from ragas import evaluate
 from ragas.metrics import ContextRelevance, answer_relevancy, faithfulness, ResponseGroundedness
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 
-from retrieve import rephrase_retrieve, get_rag_chain, get_llm, get_retriever
-
+# from retrieve import rephrase_retrieve, get_rag_chain, get_llm, get_retriever
+from retrieve_tuning_before_1 import rephrase_retrieve, get_rag_chain, get_llm, get_retriever
 # 存储对话历史
 chat_history = []
 # 存储评估用的检索结果
@@ -37,7 +37,8 @@ async def invoke_rag(query,conversation_id,chat_history):
     retriever=get_retriever(k=20,embedding_model=embedding_model)
     # bm25_retriever = get_bm25_retriever() #配合混合检索 hy
     # 2、执行重述、检索
-    retrieve_result= rephrase_retrieve(input,llm,retriever)
+    # retrieve_result= rephrase_retrieve(input,llm,retriever)
+    retrieve_result= rephrase_retrieve(input,llm,retriever,5) # 配合多查询
     # 3、获取RAG链
     rag_chain = get_rag_chain(retrieve_result,llm)
     # 4、异步执行RAG链，流式输出
